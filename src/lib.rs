@@ -3,7 +3,7 @@
 //! sometime referred to as "combinadics".
 
 #![cfg_attr(feature = "nightly", feature(test))]
-#[cfg(feature = "nightly")] extern crate test;
+#[cfg(feature = "nightly")] extern crate test as rust_test;
 
 extern crate binomial_iter;
 

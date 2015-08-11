@@ -1,4 +1,4 @@
-use test::{Bencher, black_box};
+use rust_test::{Bencher, black_box};
 use super::decode;
 
 #[bench]
