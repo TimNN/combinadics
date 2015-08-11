@@ -1,0 +1,21 @@
+[package]
+name = "combinadics"
+version = "0.1.0"
+authors = ["Tim Neumann <mail@timnn.me>"]
+description = "Provides methods to de- and encode numbers in the combinatorial number system"
+
+documentation = "https://timnn.github.io/combinadics/"
+homepage = "https://github.com/TimNN/combinadics"
+repository = "https://github.com/TimNN/combinadics"
+
+readme = "README.md"
+
+keywords = ["mathematics", "combinatorics"]
+
+license = "MIT"
+
+[features]
+nightly = []
+
+[dependencies]
+binomial-iter = "*"

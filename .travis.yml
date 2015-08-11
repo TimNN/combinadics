@@ -1,0 +1,48 @@
+language: rust
+
+sudo: false
+
+# necessary for `travis-cargo coveralls --no-sudo`
+addons:
+  apt:
+    packages:
+      - libcurl4-openssl-dev
+      - libelf-dev
+      - libdw-dev
+
+# run builds for all the trains (and more)
+rust:
+  - nightly
+  - beta
+  # check it compiles on the latest stable compiler
+  - stable
+  # and the first stable one (this should be bumped as the minimum
+  # Rust version required changes)
+  - 1.0.0
+
+# load travis-cargo
+before_script:
+  - |
+      pip install 'travis-cargo<0.2' --user &&
+      export PATH=$HOME/.local/bin:$PATH
+
+# the main build
+script:
+  - |
+      travis-cargo build &&
+      travis-cargo test &&
+      travis-cargo bench &&
+      travis-cargo --only stable doc
+after_success:
+  # upload the documentation from the build with stable (automatically only actually
+  # runs on the master branch, not individual PRs)
+  - travis-cargo --only stable doc-upload
+  # measure code coverage and upload to coveralls.io
+  - travis-cargo coveralls --no-sudo
+
+env:
+  global:
+    # override the default `--features unstable` used for the nightly branch (optional)
+    - TRAVIS_CARGO_NIGHTLY_FEATURE=nightly
+    # encrypted github token for doc upload (see `GH_TOKEN` link above)
+    - secure: VY8f3M+y1EnHB5oHzltUZ5PzpAtI8qjxtKKuZKdrzDGbpawZMRaa3hG2qxzt+gofyaeCeb1sp7H3UAndwhZr225/4pg/YDcSmfTYxc/sUQiLbZFmDLkKXnRF8tK/uvm/rqj2NwWvUE9qTC3B3w55uwRPE+LPmg5WKZ2ZYY5rWGPXpF6eXcrWjOM82DveEyKgduMqvBLD90cDAugLgGhVfnyvbMzChy7BmZuNOxW7bE+XxXvmdh5ww/i8RIrzuN2Q2EFMbCPO8TKrJIG151pxbC8jf7TH6AX8F0i/yPpR6iAgOShn0Z7HDxdGgF6RQVHQc3imZ3EjHz9x8wRYHSqGdxTvForLxE9XbQbWEGj3kVO9nXq4eyAkw4EHccXj9tFWa0I6lwdDqJpp9pXYJ9t4kwT6YCk29BXfSKXlG+I14VB79aY//QeAr0EA0dwYR7dZ/TV178oq9+LQ1eGj7wa4AXhlLE1ZAQBGdFtqxhKUlzKfBJ5JEDD7GfNQNmOlcG0d/ChR8JHEYDYZBEukj8/4H//a4fVyoIbkEZr63+zzacnikTUEOlsAnpZi56RanHndsXknrEq7TbsunrBSZdHDbHMNxrMu6txZ0cVW9Q+y8/M8/iHcudMRGJl+ZlNkdi/1h1FjtM0QJuutspmNGsEK7rv3QkosUHsE8nP8DkmXniU=
