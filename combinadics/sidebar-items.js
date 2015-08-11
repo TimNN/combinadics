@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["decode","Returns an iterator over the choices decoded from the given `N` and `k`. The choices will be returned by the iterator in descending order."]],"struct":[["DecodeIter","Iterates through all choices decoded from the given `N` and `k` in descending order."]]});
